@@ -3,7 +3,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * creates a canvas for the game 2048
  * 
- * @Florian Mansfeld
+ * @author Florian Mansfeld
  * @version (a version number or a date)
  */
 public class Canvas extends World
