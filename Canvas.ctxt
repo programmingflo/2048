@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=Canvas
+comment0.text=\r\n\ creates\ a\ canvas\ for\ the\ game\ 2048\r\n\ \r\n\ @Florian\ Mansfeld\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=
+comment1.target=Canvas()
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ Canvas.\r\n\ \r\n
+numComments=2
