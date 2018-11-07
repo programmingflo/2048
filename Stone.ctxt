@@ -1,0 +1,8 @@
+#BlueJ class context
+comment0.target=Stone
+comment0.text=\r\n\ Stone\ on\ the\ canvas\r\n\ \r\n\ @author\ Florian\ Mansfeld\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=x\ y
+comment1.target=Stone(int,\ int)
+comment2.params=
+comment2.target=void\ act()
+numComments=3
