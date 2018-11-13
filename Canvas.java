@@ -18,8 +18,9 @@ public class Canvas extends World
     {
         super(4, 4, 50);
         addObject(new Stone(),1,1);
+        addObject(new Stone(),3,2);
+        addObject(new Stone(),2,2);
         addObject(new Stone(),1,2);
-        addObject(new Stone(),2,1);
     }
 
     public void act(){
@@ -31,50 +32,121 @@ public class Canvas extends World
     public List<List<Stone>> sortByPosition(){
         List<Stone> stones = getObjects(Stone.class);
         List<List<Stone>> output = new ArrayList<List<Stone>>();
+        //initialize two-dimensional list
         for (int i = 0; i < 4; i++) {
             output.add(new ArrayList<Stone>());
         }
 
 
         if(Greenfoot.isKeyDown("right")){
-          //sort by line
+            //sort by line
             for(Stone stone: stones){
-                //System.out.println("stone");
                 output.get(stone.getY()).add(stone);
             }
-            //sort in line
+
+            //sort in line (inverted bubblesort)
             for (int i = 0; i < output.size(); i++) {
-                for (int j = 1; j < output.get(i).size() && output.get(i).size() != 1; j++) {
-                    //System.out.println("test");
-                    if(output.get(i).get(j).getX() < output.get(i).get(j-1).getX()){
-                        //System.out.println("test");
-                        //swap
-                        Stone temp = output.get(i).get(j-1);
-                        output.get(i).set(j-1,output.get(i).get(j));
-                        output.get(i).set(j,output.get(i).get(j-1));
+                for (int k = 1; k < output.get(i).size() && output.get(i).size() != 1; k++) {
+                    for (int j = 1; j < output.get(i).size() && output.get(i).size() != 1; j++) {
+                        //if stone(j-1) is more right then stone(j) -> swap
+                        if(output.get(i).get(j).getX() > output.get(i).get(j-1).getX()){
+                            //swap
+                            Stone temp = output.get(i).get(j-1);
+                            output.get(i).set(j-1,output.get(i).get(j));
+                            output.get(i).set(j,temp);
+                        }
                     }
                 }
             }
 
             //test output
             for (Stone stone : output.get(2)) {
-              System.out.println("test");
+                System.out.println("test2");
                 System.out.print(stone.getX());
                 System.out.println(stone.getY());
             }
         }else if(Greenfoot.isKeyDown("left")){
-            for(Stone stone: stones){
-                output.get(stone.getY()).add(stone);
-            }
-        }/*else if(Greenfoot.isKeyDown("up")){
-            for(Stone stone: stones){
-                output[stone.getX()].add(stone);
-            }
+          //sort by line
+          for(Stone stone: stones){
+              output.get(stone.getY()).add(stone);
+          }
+
+          //sort in line (inverted bubblesort)
+          for (int i = 0; i < output.size(); i++) {
+              for (int k = 1; k < output.get(i).size() && output.get(i).size() != 1; k++) {
+                  for (int j = 1; j < output.get(i).size() && output.get(i).size() != 1; j++) {
+                      //if stone(j-1) is more right then stone(j) -> swap
+                      if(output.get(i).get(j).getX() < output.get(i).get(j-1).getX()){
+                          //swap
+                          Stone temp = output.get(i).get(j-1);
+                          output.get(i).set(j-1,output.get(i).get(j));
+                          output.get(i).set(j,temp);
+                      }
+                  }
+              }
+          }
+
+          //test output
+          for (Stone stone : output.get(2)) {
+              System.out.println("test2");
+              System.out.print(stone.getX());
+              System.out.println(stone.getY());
+          }
+        }else if(Greenfoot.isKeyDown("up")){
+          //sort by coloumn
+          for(Stone stone: stones){
+              output.get(stone.getX()).add(stone);
+          }
+
+          //sort in line (inverted bubblesort)
+          for (int i = 0; i < output.size(); i++) {
+              for (int k = 1; k < output.get(i).size() && output.get(i).size() != 1; k++) {
+                  for (int j = 1; j < output.get(i).size() && output.get(i).size() != 1; j++) {
+                      //if stone(j-1) is more right then stone(j) -> swap
+                      if(output.get(i).get(j).getY() < output.get(i).get(j-1).getY()){
+                          //swap
+                          Stone temp = output.get(i).get(j-1);
+                          output.get(i).set(j-1,output.get(i).get(j));
+                          output.get(i).set(j,temp);
+                      }
+                  }
+              }
+          }
+
+          //test output
+          for (Stone stone : output.get(1)) {
+              System.out.println("test3");
+              System.out.print(stone.getX());
+              System.out.println(stone.getY());
+          }
         }else if(Greenfoot.isKeyDown("down")){
-            for(Stone stone: stones){
-                output[stone.getX()].add(stone);
-            }
-        }*/
+          //sort by coloumn
+          for(Stone stone: stones){
+              output.get(stone.getX()).add(stone);
+          }
+
+          //sort in line (inverted bubblesort)
+          for (int i = 0; i < output.size(); i++) {
+              for (int k = 1; k < output.get(i).size() && output.get(i).size() != 1; k++) {
+                  for (int j = 1; j < output.get(i).size() && output.get(i).size() != 1; j++) {
+                      //if stone(j-1) is more right then stone(j) -> swap
+                      if(output.get(i).get(j).getY() > output.get(i).get(j-1).getY()){
+                          //swap
+                          Stone temp = output.get(i).get(j-1);
+                          output.get(i).set(j-1,output.get(i).get(j));
+                          output.get(i).set(j,temp);
+                      }
+                  }
+              }
+          }
+
+          //test output
+          for (Stone stone : output.get(1)) {
+              System.out.println("test4");
+              System.out.print(stone.getX());
+              System.out.println(stone.getY());
+          }
+        }
 
         return output;
     }
