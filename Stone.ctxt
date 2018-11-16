@@ -1,8 +1,18 @@
 #BlueJ class context
 comment0.target=Stone
-comment0.text=\r\n\ Stone\ on\ the\ canvas\r\n\ \r\n\ @author\ Florian\ Mansfeld\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
-comment1.params=x\ y
-comment1.target=Stone(int,\ int)
-comment2.params=
-comment2.target=void\ act()
-numComments=3
+comment0.text=\r\n\ Stone\ on\ the\ canvas\r\n\r\n\ @author\ Florian\ Mansfeld\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=
+comment1.target=Stone()
+comment2.params=value
+comment2.target=Stone(int)
+comment3.params=
+comment3.target=void\ act()
+comment4.params=
+comment4.target=int\ getValue()
+comment5.params=
+comment5.target=void\ doubleValue()
+comment6.params=actor
+comment6.target=boolean\ checkIntersection(greenfoot.Actor)
+comment7.params=directionX\ directionY
+comment7.target=boolean\ isAtBorder(int,\ int)
+numComments=8

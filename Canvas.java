@@ -28,20 +28,24 @@ public class Canvas extends World
 
         if(Greenfoot.isKeyDown("right")){
             List<List<Stone>> sortedStones = sortToRight(stoneList);
+            moveStones(sortedStones,1,0);
         }else if(Greenfoot.isKeyDown("left")){
             List<List<Stone>> sortedStones = sortToLeft(stoneList);
+            moveStones(sortedStones,-1,0);
         }else if(Greenfoot.isKeyDown("up")){
             List<List<Stone>> sortedStones = sortToUp(stoneList);
+            moveStones(sortedStones,0,-1);
         }else if(Greenfoot.isKeyDown("down")){
             List<List<Stone>> sortedStones = sortToDown(stoneList);
+            moveStones(sortedStones,0,1);
         }
 
         //test output
-        for (Stone stone : sortedStones.get(1)) {
+        /*for (Stone stone : sortedStones.get(1)) {
             System.out.println("output of sorted stones");
             System.out.print(stone.getX());
             System.out.println(stone.getY());
-        }
+        }*/
 
     }
 
@@ -71,6 +75,7 @@ public class Canvas extends World
                 }
             }
         }
+        return output;
     }
 
     List<List<Stone>> sortToLeft(List<Stone> stones){
@@ -99,6 +104,7 @@ public class Canvas extends World
                 }
             }
         }
+        return output;
     }
 
     List<List<Stone>> sortToUp(List<Stone> stones){
@@ -127,9 +133,10 @@ public class Canvas extends World
                 }
             }
         }
+        return output;
     }
 
-    List<List<Stone>> sortTopDown(List<Stone> stones){
+    List<List<Stone>> sortToDown(List<Stone> stones){
         List<List<Stone>> output = new ArrayList<List<Stone>>();
         //initialize two-dimensional list
         for (int i = 0; i < 4; i++) {
@@ -155,6 +162,7 @@ public class Canvas extends World
                 }
             }
         }
+        return output;
     }
 
     List<List<Stone>> sortByPosition(){
@@ -272,5 +280,33 @@ public class Canvas extends World
         }
 
         return output;
+    }
+
+    void moveStones(List<List<Stone>> stones, int directionX, int directionY){
+        for (List<Stone> stoneList : stones) {
+            for(int i = 0; i < stoneList.size()-1;i++){
+                //check if two adjecent stones has the same value
+                if(stoneList.get(i).getValue() == stoneList.get(i+1).getValue()){
+                    //"connect the two stones" -> double the value of the first stone and remove the second stone
+                    stoneList.get(i).doubleValue();
+                    removeObject(stoneList.get(i+1));
+                    stoneList.remove(i+1);
+                }
+                //move as far as possible
+                while(!stoneList.get(i).isAtBorder(directionX,directionY)){
+                    //TODO: at edge only in one direction
+                    //TODO: better logic?
+                    if(i>0){
+                        if(stoneList.get(i).checkIntersection(stoneList.get(i-1))){
+                            break;
+                        }else{
+                            stoneList.get(i).setLocation(stoneList.get(i).getX()+directionX,stoneList.get(i).getY()+directionY);
+                        }
+                    }else{
+                        stoneList.get(i).setLocation(stoneList.get(i).getX()+directionX,stoneList.get(i).getY()+directionY);
+                    }
+                }
+            }
+        }
     }
 }
