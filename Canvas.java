@@ -6,7 +6,9 @@ import java.util.ArrayList;
  * creates a canvas for the game 2048
  *
  * @author Florian Mansfeld
- * @version (a version number or a date)
+ * // ich hab hier jetzt einfach mal die Version 0.100 ausgewaehlt, als Zeitpunkt einfach die Zeit, zu der ich meinen Senf dazu hochlade
+ * @version 0.100; 2018.11.18 - 22:00
+ * 
  */
 public class Canvas extends World
 {
@@ -16,7 +18,8 @@ public class Canvas extends World
      */
     public Canvas()
     {
-        super(4, 4, 50);
+        super(4, 4, 100);
+        setBackground("2048_Background.png");   // Background ist im Endeffekt nur ein weisses Feld mit einem 1px dicken, grauen Rand oben und links
         addObject(new Stone(),1,1);
         addObject(new Stone(),3,2);
         addObject(new Stone(),2,2);
