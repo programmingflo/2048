@@ -1,12 +1,12 @@
 #BlueJ class context
 comment0.target=Stone
-comment0.text=\r\n\ Stone\ on\ the\ canvas\r\n\r\n\ @author\ Florian\ Mansfeld\ &\ Georg\ Roemmling\r\n\ \r\n\ //\ ich\ hab\ hier\ jetzt\ einfach\ mal\ die\ Version\ 0.100\ ausgewaehlt,\ als\ Zeitpunkt\ einfach\ die\ Zeit,\ zu\ der\ ich\ meinen\ Senf\ dazu\ hochlade\r\n\ @version\ 0.100;\ 2018.11.18\ -\ 22\:00\r\n\ \r\n
+comment0.text=\r\n\ Stone\ on\ the\ canvas\r\n\r\n\ @author\ Florian\ Mansfeld\ &\ Georg\ Roemmling\r\n\r\n\ //\ ich\ hab\ hier\ jetzt\ einfach\ mal\ die\ Version\ 0.100\ ausgewaehlt,\ als\ Zeitpunkt\ einfach\ die\ Zeit,\ zu\ der\ ich\ meinen\ Senf\ dazu\ hochlade\r\n\ @version\ 0.100;\ 2018.11.18\ -\ 22\:00\r\n\r\n
 comment1.params=
 comment1.target=Stone()
 comment10.params=number
 comment10.target=boolean\ isPowerOfTwo(int)
-comment11.params=actor
-comment11.target=boolean\ checkIntersection(greenfoot.Actor)
+comment11.params=stones\ directionX\ directionY
+comment11.target=boolean\ checkIntersection(java.util.List,\ int,\ int)
 comment12.params=directionX\ directionY
 comment12.target=boolean\ isAtBorder(int,\ int)
 comment2.params=value

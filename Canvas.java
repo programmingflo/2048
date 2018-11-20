@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * @author Florian Mansfeld
  * // ich hab hier jetzt einfach mal die Version 0.100 ausgewaehlt, als Zeitpunkt einfach die Zeit, zu der ich meinen Senf dazu hochlade
  * @version 0.100; 2018.11.18 - 22:00
- * 
+ *
  */
 public class Canvas extends World
 {
@@ -287,27 +287,24 @@ public class Canvas extends World
 
     void moveStones(List<List<Stone>> stones, int directionX, int directionY){
         for (List<Stone> stoneList : stones) {
-            for(int i = 0; i < stoneList.size()-1;i++){
+            for(int i = 0; i < stoneList.size(); i++){
                 //check if two adjecent stones has the same value
-                if(stoneList.get(i).getValue() == stoneList.get(i+1).getValue()){
-                    //"connect the two stones" -> double the value of the first stone and remove the second stone
-                    stoneList.get(i).doubleValue();
-                    removeObject(stoneList.get(i+1));
-                    stoneList.remove(i+1);
+                if(i < stoneList.size()-1){
+                    if(stoneList.get(i).getValue() == stoneList.get(i+1).getValue()){
+                        //"connect the two stones" -> double the value of the first stone and remove the second stone
+                        stoneList.get(i).doubleValue();
+                        removeObject(stoneList.get(i+1));
+                        stoneList.remove(i+1);
+                    }
                 }
                 //move as far as possible
                 while(!stoneList.get(i).isAtBorder(directionX,directionY)){
-                    //TODO: at edge only in one direction
-                    //TODO: better logic?
-                    if(i>0){
-                        if(stoneList.get(i).checkIntersection(stoneList.get(i-1))){
-                            break;
-                        }else{
-                            stoneList.get(i).setLocation(stoneList.get(i).getX()+directionX,stoneList.get(i).getY()+directionY);
-                        }
-                    }else{
-                        stoneList.get(i).setLocation(stoneList.get(i).getX()+directionX,stoneList.get(i).getY()+directionY);
+                    System.out.println("move");
+                    if(i>0 && stoneList.get(i).checkIntersection(stoneList, directionX, directionY)){
+                        System.out.println("intersects");
+                        break;
                     }
+                    stoneList.get(i).setLocation(stoneList.get(i).getX()+directionX,stoneList.get(i).getY()+directionY);
                 }
             }
         }

@@ -1,13 +1,14 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.List;
 
 /**
  * Stone on the canvas
  *
  * @author Florian Mansfeld & Georg Roemmling
- * 
+ *
  * // ich hab hier jetzt einfach mal die Version 0.100 ausgewaehlt, als Zeitpunkt einfach die Zeit, zu der ich meinen Senf dazu hochlade
  * @version 0.100; 2018.11.18 - 22:00
- * 
+ *
  */
 public class Stone extends Actor
 {
@@ -45,7 +46,7 @@ public class Stone extends Actor
         changeImageBasedOnValue();
     }
 
-    
+
     void doubleValue(){
         value *= 2;
         changeImageBasedOnValue();
@@ -59,7 +60,7 @@ public class Stone extends Actor
     {
         return alreadyCombined;
     }
-    
+
     public void changeImageBasedOnValue()
     {
         /**
@@ -77,7 +78,7 @@ public class Stone extends Actor
             this.setImage("Fehler.png");
         }
     }
-    
+
     public static boolean isPowerOfTwo(int number){
         /**
          * Binaerschreibweise einer Potenz von 2 ist eine 1 gefolgt von x-mal 0.
@@ -91,9 +92,16 @@ public class Stone extends Actor
          */
         return number >= 2 && number <= 2048 && ((number & (number - 1)) == 0);
     }
-        
-    boolean checkIntersection(Actor actor){
-        return this.intersects(actor);
+
+    boolean checkIntersection(List<Stone> stones, int directionX, int directionY){
+        boolean intersection = false;
+        for (Stone stone : stones) {
+            if(this.getX() + directionX == stone.getX() &&
+                this.getY() + directionY == stone.getY()){
+                intersection = true;
+            }
+        }
+        return intersection;
     }
 
     boolean isAtBorder(int directionX, int directionY){
