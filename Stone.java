@@ -6,8 +6,8 @@ import java.util.List;
  *
  * @author Florian Mansfeld & Georg Roemmling
  *
- * // ich hab hier jetzt einfach mal die Version 0.100 ausgewaehlt, als Zeitpunkt einfach die Zeit, zu der ich meinen Senf dazu hochlade
- * @version 0.100; 2018.11.18 - 22:00
+ * 
+ * @version 0.200; 2018.11.20 - 21:00
  *
  */
 public class Stone extends Actor
@@ -34,7 +34,7 @@ public class Stone extends Actor
     }
     public void act()
     {
-        // Add your action code here.
+        // "act"-method is defined in "Canvas"-class
     }
 
     public int getValue(){
@@ -48,6 +48,7 @@ public class Stone extends Actor
 
 
     void doubleValue(){
+        // this method doesn't change "alradyCombined" to true
         value *= 2;
         changeImageBasedOnValue();
     }
@@ -93,6 +94,65 @@ public class Stone extends Actor
         return number >= 2 && number <= 2048 && ((number & (number - 1)) == 0);
     }
 
+    public boolean canAct(int directionX, int directionY)
+    {
+        // Die Tatsache, dass nur eine lineare Bewegung in eine der Richtungen durchgefuehrt wird, setz ich jetzt einfach mal voraus
+        // erste Pruefung darauf ob wir mit der gewuenschten Bewegung ueberhaupt auf dem Spielfeld landen wuerden:
+        if (getX() + directionX >= 0 && getX() + directionX <= 3 && getY() + directionY >= 0 && getY() + directionY <= 3)
+        {
+            // Falls in der gewuenschten Richtung kein Stein liegt, gehts:
+            Stone stoneOther = (Stone)getOneObjectAtOffset(directionX, directionY, Stone.class);
+            if (stoneOther == null)
+            {
+                return true;    // Kein anderer Stein in Bewegungsrichtung => Bewegung moeglich
+            } else {
+                // Andernfalls wird geprueft, ob die beiden den selben Wert haben:
+                if (this.getValue() == stoneOther.getValue())
+                {
+                    // Haben die beiden Steine denselben Wert, wird geprueft ob sie sich schon verbunden haben:
+                    if (this.getalreadyCombined() != true && stoneOther.getalreadyCombined() != true)
+                    {
+                        return true;        // Anderer Stein hat denselben Wert, beide haben sich noch nicht verbunden == Verbindung moeglich
+                    } else {
+                        return false;       // Anderer Stein hat denselben Wert, mind. einer der beidne hat sich schon verbunden == Verbindung nicht moeglich
+                    }
+                } else {
+                    return false;       // Anderer Stein hat anderen Wert === nichts moeglich
+                }
+            }
+        } else {
+            return false;       // Bewegung wuerde ausserhalb des Spielfelds landen == Geht nicht
+        }
+    }
+    
+    public void moveOrCombine(int directionX, int directionY)
+    {
+        // Falls kein Stein in Bewegungsrichtung liegt, wird sich einfach in die Richtung bewegt.
+        Stone stoneOther = (Stone)getOneObjectAtOffset(directionX, directionY, Stone.class);
+        if (stoneOther == null)
+        {
+            setLocation(getX() + directionX, getY() + directionY);
+        } else {
+            // andernfalls wird geprueft, ob der Stein vor uns denselben Wert hat:
+            if (this.getValue() == stoneOther.getValue())
+            {
+                // falls selber Wert, wird geprueft ob sich beide noch nicht verbunden haben
+                // falls dem so ist, wird sich verbunden
+                if (this.getalreadyCombined() != true && stoneOther.getalreadyCombined() != true)
+                {
+                    // irgendwie removen
+                    //greenfoot.removeObject(stoneOther);
+                    getWorld().removeObject(stoneOther);
+                    this.doubleValue();
+                    this.setalreadyCombined(true);
+                    setLocation(getX() + directionX, getY() + directionY);
+                }
+            } 
+        }
+    }
+    
+    
+    
     boolean checkIntersection(List<Stone> stones, int directionX, int directionY){
         boolean intersection = false;
         for (Stone stone : stones) {

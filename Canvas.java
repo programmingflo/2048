@@ -5,9 +5,9 @@ import java.util.ArrayList;
 /**
  * creates a canvas for the game 2048
  *
- * @author Florian Mansfeld
- * // ich hab hier jetzt einfach mal die Version 0.100 ausgewaehlt, als Zeitpunkt einfach die Zeit, zu der ich meinen Senf dazu hochlade
- * @version 0.100; 2018.11.18 - 22:00
+ * @author Florian Mansfeld & Georg Roemmling
+ * 
+ * @version 0.200; 2018.11.20 - 21:00
  *
  */
 public class Canvas extends World
@@ -28,6 +28,11 @@ public class Canvas extends World
 
     public void act(){
         List<Stone> stoneList = getObjects(Stone.class);
+        // Zuruecksetzen von "alradyCombined" fuer alle Steine
+        for (Stone s: stoneList)
+        {
+            s.setalreadyCombined(false);
+        }
 
         if(Greenfoot.isKeyDown("right")){
             List<List<Stone>> sortedStones = sortToRight(stoneList);
@@ -286,6 +291,20 @@ public class Canvas extends World
     }
 
     void moveStones(List<List<Stone>> stones, int directionX, int directionY){
+        
+        for (List<Stone> stoneList : stones) {
+            // stoneList-wise, every stone will perform "moveOrCombin" until it can no longer move / combine
+            // This fact is represented with the boolean returned from the method "canAct"
+            for(int i = 0; i < stoneList.size();i++){
+
+                while(stoneList.get(i).canAct(directionX, directionY)){
+                    stoneList.get(i).moveOrCombine(directionX, directionY);
+                }
+            }
+        }
+        /**
+         * Synthax, den Flor davor genommen hatte:
+         *
         for (List<Stone> stoneList : stones) {
             for(int i = 0; i < stoneList.size(); i++){
                 //check if two adjecent stones has the same value
@@ -308,5 +327,7 @@ public class Canvas extends World
                 }
             }
         }
+        */
     }
+    
 }
