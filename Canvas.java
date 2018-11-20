@@ -7,7 +7,7 @@ import java.util.ArrayList;
  *
  * @author Florian Mansfeld & Georg Roemmling
  * 
- * @version 0.200; 2018.11.20 - 21:00
+ * @version 0.250; 2018.11.21 - 00:30
  *
  */
 public class Canvas extends World
@@ -16,6 +16,13 @@ public class Canvas extends World
      * Constructor for objects of class Canvas.
      *
      */
+    private boolean canMoveUp;
+    private boolean canMoveRight;
+    private boolean canMoveDown;
+    private boolean canMoveLeft;
+    private boolean didAnythingHappen;
+    private List<Stone> stoneList;
+    private List<EmptySquare> emptySquares;
     public Canvas()
     {
         super(4, 4, 100);
@@ -24,30 +31,115 @@ public class Canvas extends World
         addObject(new Stone(),3,2);
         addObject(new Stone(),2,2);
         addObject(new Stone(),1,2);
+        
     }
 
-    public void act(){
-        List<Stone> stoneList = getObjects(Stone.class);
+    public void createStoneListAndChangeAlreadyTurnedToFalse()
+    {
+        stoneList = getObjects(Stone.class);
         // Zuruecksetzen von "alradyCombined" fuer alle Steine
         for (Stone s: stoneList)
         {
             s.setalreadyCombined(false);
         }
-
-        if(Greenfoot.isKeyDown("right")){
-            List<List<Stone>> sortedStones = sortToRight(stoneList);
-            moveStones(sortedStones,1,0);
-        }else if(Greenfoot.isKeyDown("left")){
-            List<List<Stone>> sortedStones = sortToLeft(stoneList);
-            moveStones(sortedStones,-1,0);
-        }else if(Greenfoot.isKeyDown("up")){
-            List<List<Stone>> sortedStones = sortToUp(stoneList);
-            moveStones(sortedStones,0,-1);
-        }else if(Greenfoot.isKeyDown("down")){
-            List<List<Stone>> sortedStones = sortToDown(stoneList);
-            moveStones(sortedStones,0,1);
+    }
+    
+    public void checkPossibilityOfMovement()
+    {
+        canMoveUp = false;
+        canMoveRight = false;
+        canMoveDown = false;
+        canMoveLeft = false;
+        for (Stone s: stoneList)
+        {
+            if (s.canAct(0, -1)) { canMoveUp = true;}
+            if (s.canAct(1, 0)) { canMoveRight = true;}
+            if (s.canAct(0, 1)) { canMoveDown = true;}
+            if (s.canAct(-1, 0)) { canMoveLeft = true;}
         }
-
+    }
+    
+    public List<EmptySquare> checkForEmptySquares()
+    {
+        // returns a List with the coordinates of empty squares:
+        List<EmptySquare> list2 = new ArrayList<EmptySquare>();
+        for (int x = 0; x <= 3; x ++)
+        {
+            for (int y = 0; y <= 3; y++)
+            {
+                if (getObjectsAt(x, y, Stone.class) == null)
+                {
+                    list2.add(new EmptySquare(x, y));
+                }
+            }
+        }
+        return list2;
+    }
+    
+    public void createRandomNewStone()
+    {
+        emptySquares = checkForEmptySquares();
+        // Only if emptySquares actually contains at least one EmptySquare, the method creates a new Stone.
+        if (emptySquares.size() > 0)
+        {
+            EmptySquare es = emptySquares.get(Greenfoot.getRandomNumber(emptySquares.size() + 1));
+            addObject(new Stone(), es.getX(), es.getY());
+        }
+        for (EmptySquare es: emptySquares)
+        {
+            System.out.println("es ist hier: (" + es.getX() + "/" + es.getY() + ").");
+        }
+        if (emptySquares == null)
+        {
+            System.out.println("Die Liste emptySquares gibts garnicht");
+        }
+    }
+    
+    
+    public void act(){
+        // Greenfoot is supposed to take no action unless one of the arrows is pressed:
+        if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("up") || Greenfoot.isKeyDown("down"))
+        {
+            // The creation of the stoneList and returning "alreadyCombined" to "false" for all Stones is supposed to be done, regardless of which button was pressed
+            createStoneListAndChangeAlreadyTurnedToFalse();
+            // Before stones are attempted to move, there is a check whether or not the movement in those directions is even possible:
+            checkPossibilityOfMovement();
+            // If a certain button has been pressed and movement into this direction is possible, the Stone(s) get moved.
+            // Since this will always end with at least one Stone being moved, another Stone will be randomly generated on an empty space.
+            if(Greenfoot.isKeyDown("right") && canMoveRight == true){
+                List<List<Stone>> sortedStones = sortToRight(stoneList);
+                moveStones(sortedStones,1,0);
+                createRandomNewStone();
+            }else if(Greenfoot.isKeyDown("left") && canMoveLeft == true){
+                List<List<Stone>> sortedStones = sortToLeft(stoneList);
+                moveStones(sortedStones,-1,0);
+                createRandomNewStone();
+            }else if(Greenfoot.isKeyDown("up") && canMoveUp == true){
+                List<List<Stone>> sortedStones = sortToUp(stoneList);
+                moveStones(sortedStones,0,-1);
+                createRandomNewStone();
+            }else if(Greenfoot.isKeyDown("down") && canMoveDown == true){
+                List<List<Stone>> sortedStones = sortToDown(stoneList);
+                moveStones(sortedStones,0,1);
+                createRandomNewStone();
+            }
+        }
+        
+        /**
+        // Testen ob die Bewegung in Richtungen moeglich ist:
+        stoneList = getObjects(Stone.class);
+        
+        
+        // Ausgabe in welche Richtungen es moeglich ist sich zu bewegen:
+        System.out.println("Nach oben: " + canMoveUp);
+        System.out.println("Nach rechts: " + canMoveRight);
+        System.out.println("Nach unten: " + canMoveDown);
+        System.out.println("Nach links: " + canMoveLeft);
+        */
+        
+        
+        
+        
         //test output
         /*for (Stone stone : sortedStones.get(1)) {
             System.out.println("output of sorted stones");

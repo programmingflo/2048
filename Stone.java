@@ -5,9 +5,8 @@ import java.util.List;
  * Stone on the canvas
  *
  * @author Florian Mansfeld & Georg Roemmling
- *
  * 
- * @version 0.200; 2018.11.20 - 21:00
+ * @version 0.250; 2018.11.21 - 00:30
  *
  */
 public class Stone extends Actor
