@@ -24,14 +24,10 @@ public class Stone extends Actor
     private int value;
     private boolean alreadyCombined;
 
-    public Stone(){
-        this.value = 2;
-        this.alreadyCombined = false;
-        this.changeImageBasedOnValue();
-    }
-    
     public Stone(int value){
         this.value = value;
+        this.alreadyCombined = false;
+        this.changeImageBasedOnValue();
     }
 
     public int getValue(){
@@ -45,11 +41,11 @@ public class Stone extends Actor
         this.alreadyCombined = true;
     }
 
-    public void setalreadyCombined(boolean alreadyCombined)
+    public void setAlreadyCombined(boolean alreadyCombined)
     {
         this.alreadyCombined = alreadyCombined;
     }
-    public boolean getalreadyCombined()
+    public boolean getAlreadyCombined()
     {
         return alreadyCombined;
     }
@@ -82,7 +78,7 @@ public class Stone extends Actor
                 if (this.getValue() == stoneOther.getValue())
                 {
                     // Haben die beiden Steine denselben Wert, wird geprueft ob sie sich schon verbunden haben:
-                    if (this.getalreadyCombined() != true && stoneOther.getalreadyCombined() != true)
+                    if (this.getAlreadyCombined() != true && stoneOther.getAlreadyCombined() != true)
                     {
                         return true;        // Anderer Stein hat denselben Wert, beide haben sich noch nicht verbunden == Verbindung moeglich
                     } else {
@@ -109,7 +105,7 @@ public class Stone extends Actor
             if (this.getValue() == stoneOther.getValue())
             {
                 // falls selber Wert, wird geprueft ob sich beide noch nicht verbunden haben --> falls dem so ist, wird sich verbunden
-                if (this.getalreadyCombined() != true && stoneOther.getalreadyCombined() != true)
+                if (this.getAlreadyCombined() != true && stoneOther.getAlreadyCombined() != true)
                 {
                     // combination of two stones
                     getWorld().removeObject(stoneOther);

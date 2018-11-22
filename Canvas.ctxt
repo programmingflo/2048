@@ -1,16 +1,14 @@
 #BlueJ class context
 comment0.target=Canvas
-comment0.text=\r\n\ creates\ a\ canvas\ for\ the\ game\ 2048\r\n\r\n\ @author\ Florian\ Mansfeld\ &\ Georg\ Roemmling\r\n\ \r\n\ @version\ 0.300;\ 2018.11.22\ -\ 11\:00\r\n\r\n
+comment0.text=\r\n\ creates\ a\ canvas\ for\ the\ game\ 2048\r\n\r\n\ @author\ Florian\ Mansfeld\ &\ Georg\ Roemmling\r\n\r\n\ @version\ 0.300;\ 2018.11.22\ -\ 11\:00\r\n\r\n
 comment1.params=
 comment1.target=Canvas()
 comment10.params=stones
 comment10.target=java.util.List\ sortToDown(java.util.List)
-comment11.params=
-comment11.target=java.util.List\ sortByPosition()
-comment12.params=stones\ directionX\ directionY
-comment12.target=void\ moveStones(java.util.List,\ int,\ int)
+comment11.params=stones\ directionX\ directionY
+comment11.target=void\ moveStones(java.util.List,\ int,\ int)
 comment2.params=
-comment2.target=void\ createStoneListAndChangeAlreadyTurnedToFalse()
+comment2.target=void\ resetAlreadyCombined()
 comment3.params=
 comment3.target=void\ checkPossibilityOfMovement()
 comment4.params=
@@ -25,4 +23,4 @@ comment8.params=stones
 comment8.target=java.util.List\ sortToLeft(java.util.List)
 comment9.params=stones
 comment9.target=java.util.List\ sortToUp(java.util.List)
-numComments=13
+numComments=12

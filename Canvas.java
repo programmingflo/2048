@@ -28,7 +28,7 @@ public class Canvas extends World
     public Canvas()
     {
         super(4, 4, 100);
-        setBackground("2048_Background.png");   // Background ist im Endeffekt nur ein weisses Feld mit einem 1px dicken, grauen Rand oben und links
+        setBackground("2048_Background.png");
         addObject(new Stone(2),1,1);
         addObject(new Stone(2),3,2);
         addObject(new Stone(2),2,2);
@@ -36,13 +36,13 @@ public class Canvas extends World
 
     }
 
-    public void createStoneListAndChangeAlreadyTurnedToFalse()
+    public void resetAlreadyCombined()
     {
         stoneList = getObjects(Stone.class);
-        // Zuruecksetzen von "alradyCombined" fuer alle Steine
+        // reset "alreadyCombined" for all Stones
         for (Stone s: stoneList)
         {
-            s.setalreadyCombined(false);
+            s.setAlreadyCombined(false);
         }
     }
 
@@ -95,17 +95,6 @@ public class Canvas extends World
                 addObject(new Stone(2), es.getX(), es.getY());
             }
         }
-        /**
-         * Test to see the contents of the emptySquares-List
-        for (EmptySquare es: emptySquares)
-        {
-            System.out.println("es ist hier: (" + es.getX() + "/" + es.getY() + ").");
-        }
-        if (emptySquares.isEmpty())
-        {
-            System.out.println("Die Liste emptySquares gibts garnicht");
-        }
-        */
     }
 
 
@@ -114,7 +103,7 @@ public class Canvas extends World
         if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("up") || Greenfoot.isKeyDown("down"))
         {
             // The creation of the stoneList and returning "alreadyCombined" to "false" for all Stones is supposed to be done, regardless of which button was pressed
-            createStoneListAndChangeAlreadyTurnedToFalse();
+            resetAlreadyCombined();
             // Before stones are attempted to move, there is a check whether or not the movement in those directions is even possible:
             checkPossibilityOfMovement();
             // If no movement is possible anymore, the game is supposed to end with a "Game over"
@@ -145,15 +134,6 @@ public class Canvas extends World
                 createRandomNewStone();
             }
         }
-
-
-        //test output
-        /*for (Stone stone : sortedStones.get(1)) {
-            System.out.println("output of sorted stones");
-            System.out.print(stone.getX());
-            System.out.println(stone.getY());
-        }*/
-
     }
 
     List<List<Stone>> sortToRight(List<Stone> stones){
@@ -272,123 +252,6 @@ public class Canvas extends World
         return output;
     }
 
-    List<List<Stone>> sortByPosition(){
-        List<Stone> stones = getObjects(Stone.class);
-        List<List<Stone>> output = new ArrayList<List<Stone>>();
-        //initialize two-dimensional list
-        for (int i = 0; i < 4; i++) {
-            output.add(new ArrayList<Stone>());
-        }
-
-
-        if(Greenfoot.isKeyDown("right")){
-            //sort by line
-            for(Stone stone: stones){
-                output.get(stone.getY()).add(stone);
-            }
-
-            //sort in line (inverted bubblesort)
-            for (int i = 0; i < output.size(); i++) {
-                for (int k = 1; k < output.get(i).size() && output.get(i).size() != 1; k++) {
-                    for (int j = 1; j < output.get(i).size() && output.get(i).size() != 1; j++) {
-                        //if stone(j-1) is more right then stone(j) -> swap
-                        if(output.get(i).get(j).getX() > output.get(i).get(j-1).getX()){
-                            //swap
-                            Stone temp = output.get(i).get(j-1);
-                            output.get(i).set(j-1,output.get(i).get(j));
-                            output.get(i).set(j,temp);
-                        }
-                    }
-                }
-            }
-
-            //test output
-            for (Stone stone : output.get(2)) {
-                System.out.println("test2");
-                System.out.print(stone.getX());
-                System.out.println(stone.getY());
-            }
-        }else if(Greenfoot.isKeyDown("left")){
-          //sort by line
-          for(Stone stone: stones){
-              output.get(stone.getY()).add(stone);
-          }
-
-          //sort in line (inverted bubblesort)
-          for (int i = 0; i < output.size(); i++) {
-              for (int k = 1; k < output.get(i).size() && output.get(i).size() != 1; k++) {
-                  for (int j = 1; j < output.get(i).size() && output.get(i).size() != 1; j++) {
-                      //if stone(j-1) is more right then stone(j) -> swap
-                      if(output.get(i).get(j).getX() < output.get(i).get(j-1).getX()){
-                          //swap
-                          Stone temp = output.get(i).get(j-1);
-                          output.get(i).set(j-1,output.get(i).get(j));
-                          output.get(i).set(j,temp);
-                      }
-                  }
-              }
-          }
-
-          //test output
-          for (Stone stone : output.get(2)) {
-              System.out.println("test2");
-              System.out.print(stone.getX());
-              System.out.println(stone.getY());
-          }
-        }else if(Greenfoot.isKeyDown("up")){
-          //sort by coloumn
-          for(Stone stone: stones){
-              output.get(stone.getX()).add(stone);
-          }
-
-          //sort in line (inverted bubblesort)
-          for (int i = 0; i < output.size(); i++) {
-              for (int k = 1; k < output.get(i).size() && output.get(i).size() != 1; k++) {
-                  for (int j = 1; j < output.get(i).size() && output.get(i).size() != 1; j++) {
-                      //if stone(j-1) is more right then stone(j) -> swap
-                      if(output.get(i).get(j).getY() < output.get(i).get(j-1).getY()){
-                          //swap
-                          Stone temp = output.get(i).get(j-1);
-                          output.get(i).set(j-1,output.get(i).get(j));
-                          output.get(i).set(j,temp);
-                      }
-                  }
-              }
-          }
-
-          //test output
-          for (Stone stone : output.get(1)) {
-              System.out.println("test3");
-              System.out.print(stone.getX());
-              System.out.println(stone.getY());
-          }
-        }else if(Greenfoot.isKeyDown("down")){
-          //sort by coloumn
-          for(Stone stone: stones){
-              output.get(stone.getX()).add(stone);
-          }
-
-          //sort in line (inverted bubblesort)
-          for (int i = 0; i < output.size(); i++) {
-              for (int k = 1; k < output.get(i).size() && output.get(i).size() != 1; k++) {
-                  for (int j = 1; j < output.get(i).size() && output.get(i).size() != 1; j++) {
-                      //if stone(j-1) is more right then stone(j) -> swap
-                      if(output.get(i).get(j).getY() > output.get(i).get(j-1).getY()){
-                          //swap
-                          Stone temp = output.get(i).get(j-1);
-                          output.get(i).set(j-1,output.get(i).get(j));
-                          output.get(i).set(j,temp);
-                      }
-                  }
-              }
-          }
-
-
-        }
-
-        return output;
-    }
-
     void moveStones(List<List<Stone>> stones, int directionX, int directionY){
         // stoneList-wise, every stone will perform "moveOrCombine" until it can no longer move / combine
         // This fact is represented with the boolean returned from the method "canAct"
@@ -400,32 +263,6 @@ public class Canvas extends World
                 }
             }
         }
-        /**
-         * Synthax, den Flo davor genommen hatte:
-         *
-        for (List<Stone> stoneList : stones) {
-            for(int i = 0; i < stoneList.size(); i++){
-                //check if two adjecent stones has the same value
-                if(i < stoneList.size()-1){
-                    if(stoneList.get(i).getValue() == stoneList.get(i+1).getValue()){
-                        //"connect the two stones" -> double the value of the first stone and remove the second stone
-                        stoneList.get(i).doubleValue();
-                        removeObject(stoneList.get(i+1));
-                        stoneList.remove(i+1);
-                    }
-                }
-                //move as far as possible
-                while(!stoneList.get(i).isAtBorder(directionX,directionY)){
-                    System.out.println("move");
-                    if(i>0 && stoneList.get(i).checkIntersection(stoneList, directionX, directionY)){
-                        System.out.println("intersects");
-                        break;
-                    }
-                    stoneList.get(i).setLocation(stoneList.get(i).getX()+directionX,stoneList.get(i).getY()+directionY);
-                }
-            }
-        }
-        */
     }
 
 }
