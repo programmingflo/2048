@@ -66,7 +66,7 @@ public class Stone extends Actor
     {
         // Die Tatsache, dass nur eine lineare Bewegung in eine der Richtungen durchgefuehrt wird, setz ich jetzt einfach mal voraus
         // erste Pruefung darauf ob wir mit der gewuenschten Bewegung ueberhaupt auf dem Spielfeld landen wuerden:
-        if (isAtBorder(directionX, directionY))
+        if (!isAtBorder(directionX, directionY))
         {
             // Falls in der gewuenschten Richtung kein Stein liegt, gehts:
             Stone stoneOther = (Stone) getOneObjectAtOffset(directionX, directionY, Stone.class);

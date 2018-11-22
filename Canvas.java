@@ -38,7 +38,6 @@ public class Canvas extends World
 
     public void resetAlreadyCombined()
     {
-        stoneList = getObjects(Stone.class);
         // reset "alreadyCombined" for all Stones
         for (Stone s: stoneList)
         {
@@ -102,10 +101,15 @@ public class Canvas extends World
         // Greenfoot is supposed to take no action unless one of the arrows is pressed:
         if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("up") || Greenfoot.isKeyDown("down"))
         {
+            stoneList = getObjects(Stone.class);
             // The creation of the stoneList and returning "alreadyCombined" to "false" for all Stones is supposed to be done, regardless of which button was pressed
             resetAlreadyCombined();
+
+                System.out.println("alreadyCombined");
             // Before stones are attempted to move, there is a check whether or not the movement in those directions is even possible:
             checkPossibilityOfMovement();
+
+                System.out.println("movement possible");
             // If no movement is possible anymore, the game is supposed to end with a "Game over"
             if (canMoveUp == false && canMoveRight == false && canMoveDown == false && canMoveLeft == false)
             {
@@ -114,6 +118,10 @@ public class Canvas extends World
                 Greenfoot.stop();
             }
 
+            System.out.println(String.valueOf(canMoveUp));
+            System.out.println(String.valueOf(canMoveRight));
+            System.out.println(String.valueOf(canMoveDown));
+            System.out.println(String.valueOf(canMoveLeft));
             // If a certain button has been pressed and movement into this direction is possible, the Stone(s) get moved.
             // Since this will always end with at least one Stone being moved, another Stone will be randomly generated on an empty space.
             if(Greenfoot.isKeyDown("right") && canMoveRight == true){
@@ -255,6 +263,8 @@ public class Canvas extends World
     void moveStones(List<List<Stone>> stones, int directionX, int directionY){
         // stoneList-wise, every stone will perform "moveOrCombine" until it can no longer move / combine
         // This fact is represented with the boolean returned from the method "canAct"
+
+            System.out.println("moveStones");
         for (List<Stone> stoneList : stones) {
             for(int i = 0; i < stoneList.size();i++){
 
