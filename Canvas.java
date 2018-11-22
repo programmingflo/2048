@@ -7,7 +7,7 @@ import java.util.ArrayList;
  *
  * @author Florian Mansfeld & Georg Roemmling
  * 
- * @version 0.250; 2018.11.21 - 00:30
+ * @version 0.300; 2018.11.22 - 11:00
  *
  */
 public class Canvas extends World
@@ -61,13 +61,16 @@ public class Canvas extends World
     
     public List<EmptySquare> checkForEmptySquares()
     {
-        // returns a List with the coordinates of empty squares:
+        // Checks squares if they are empty (== no Stone)
+        // If square is empty, its added to an ArrayList<EmptySquare>
+        // Returns said List
         List<EmptySquare> list2 = new ArrayList<EmptySquare>();
         for (int x = 0; x <= 3; x ++)
         {
             for (int y = 0; y <= 3; y++)
             {
-                if (getObjectsAt(x, y, Stone.class) == null)
+                List<Stone> sList3 = getObjectsAt(x, y, Stone.class);
+                if (sList3.isEmpty())
                 {
                     list2.add(new EmptySquare(x, y));
                 }
@@ -82,17 +85,20 @@ public class Canvas extends World
         // Only if emptySquares actually contains at least one EmptySquare, the method creates a new Stone.
         if (emptySquares.size() > 0)
         {
-            EmptySquare es = emptySquares.get(Greenfoot.getRandomNumber(emptySquares.size() + 1));
+            EmptySquare es = emptySquares.get(Greenfoot.getRandomNumber(emptySquares.size()));
             addObject(new Stone(), es.getX(), es.getY());
         }
+        /**
+         * Test to see the contents of the emptySquares-List
         for (EmptySquare es: emptySquares)
         {
             System.out.println("es ist hier: (" + es.getX() + "/" + es.getY() + ").");
         }
-        if (emptySquares == null)
+        if (emptySquares.isEmpty())
         {
             System.out.println("Die Liste emptySquares gibts garnicht");
         }
+        */
     }
     
     
@@ -104,6 +110,14 @@ public class Canvas extends World
             createStoneListAndChangeAlreadyTurnedToFalse();
             // Before stones are attempted to move, there is a check whether or not the movement in those directions is even possible:
             checkPossibilityOfMovement();
+            // If no movement is possible anymore, the game is supposed to end with a "Game over"
+            if (canMoveUp == false && canMoveRight == false && canMoveDown == false && canMoveLeft == false)
+            {
+                // file created with Audacity, 32 bit version didn't work, 16 boit version sounds like shit
+                Greenfoot.playSound("game over.wav");
+                Greenfoot.stop();
+            }
+            
             // If a certain button has been pressed and movement into this direction is possible, the Stone(s) get moved.
             // Since this will always end with at least one Stone being moved, another Stone will be randomly generated on an empty space.
             if(Greenfoot.isKeyDown("right") && canMoveRight == true){
@@ -124,20 +138,6 @@ public class Canvas extends World
                 createRandomNewStone();
             }
         }
-        
-        /**
-        // Testen ob die Bewegung in Richtungen moeglich ist:
-        stoneList = getObjects(Stone.class);
-        
-        
-        // Ausgabe in welche Richtungen es moeglich ist sich zu bewegen:
-        System.out.println("Nach oben: " + canMoveUp);
-        System.out.println("Nach rechts: " + canMoveRight);
-        System.out.println("Nach unten: " + canMoveDown);
-        System.out.println("Nach links: " + canMoveLeft);
-        */
-        
-        
         
         
         //test output
@@ -383,10 +383,9 @@ public class Canvas extends World
     }
 
     void moveStones(List<List<Stone>> stones, int directionX, int directionY){
-        
+        // stoneList-wise, every stone will perform "moveOrCombine" until it can no longer move / combine
+        // This fact is represented with the boolean returned from the method "canAct"
         for (List<Stone> stoneList : stones) {
-            // stoneList-wise, every stone will perform "moveOrCombin" until it can no longer move / combine
-            // This fact is represented with the boolean returned from the method "canAct"
             for(int i = 0; i < stoneList.size();i++){
 
                 while(stoneList.get(i).canAct(directionX, directionY)){
@@ -395,7 +394,7 @@ public class Canvas extends World
             }
         }
         /**
-         * Synthax, den Flor davor genommen hatte:
+         * Synthax, den Flo davor genommen hatte:
          *
         for (List<Stone> stoneList : stones) {
             for(int i = 0; i < stoneList.size(); i++){

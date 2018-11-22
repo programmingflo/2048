@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Canvas
-comment0.text=\r\n\ creates\ a\ canvas\ for\ the\ game\ 2048\r\n\r\n\ @author\ Florian\ Mansfeld\ &\ Georg\ Roemmling\r\n\ \r\n\ @version\ 0.250;\ 2018.11.21\ -\ 00\:30\r\n\r\n
+comment0.text=\r\n\ creates\ a\ canvas\ for\ the\ game\ 2048\r\n\r\n\ @author\ Florian\ Mansfeld\ &\ Georg\ Roemmling\r\n\ \r\n\ @version\ 0.300;\ 2018.11.22\ -\ 11\:00\r\n\r\n
 comment1.params=
 comment1.target=Canvas()
 comment10.params=stones
