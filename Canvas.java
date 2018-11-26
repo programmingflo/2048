@@ -1,13 +1,12 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.List;
 import java.util.ArrayList;
-
 /**
  * creates a canvas for the game 2048
  *
  * @author Florian Mansfeld & Georg Roemmling
  *
- * @version 0.300; 2018.11.22 - 11:00
+ * @version 0.400; 2018.11.26 - 13:30
  *
  */
 public class Canvas extends World
@@ -24,6 +23,14 @@ public class Canvas extends World
     private List<Stone> stoneList;
     private List<EmptySquare> emptySquares;
     private final int chancefor4 = 14;
+    private int dx;
+    private int dy;
+    private int dx1;
+    private int dx2;
+    private int dy1;
+    private int dy2;
+    String pressedKey;
+    MouseInfo mouse;
 
     public Canvas()
     {
@@ -33,11 +40,11 @@ public class Canvas extends World
         addObject(new Stone(2),3,2);
         addObject(new Stone(2),2,2);
         addObject(new Stone(2),1,2);
-
     }
 
     public void resetAlreadyCombined()
     {
+        stoneList = getObjects(Stone.class);
         // reset "alreadyCombined" for all Stones
         for (Stone s: stoneList)
         {
@@ -62,9 +69,9 @@ public class Canvas extends World
 
     public List<EmptySquare> checkForEmptySquares()
     {
-        // Checks squares if they are empty (== no Stone)
-        // If square is empty, its added to an ArrayList<EmptySquare>
-        // Returns said List
+        // checks squares if they are empty (== no Stone)
+        // if square is empty, its added to an ArrayList<EmptySquare>
+        // returns said List
         List<EmptySquare> list2 = new ArrayList<EmptySquare>();
         for (int x = 0; x <= 3; x ++)
         {
@@ -83,7 +90,7 @@ public class Canvas extends World
     public void createRandomNewStone()
     {
         emptySquares = checkForEmptySquares();
-        // Only if emptySquares actually contains at least one EmptySquare, the method creates a new Stone.
+        // only if emptySquares actually contains at least one EmptySquare, the method creates a new Stone.
         if (emptySquares.size() > 0)
         {
             EmptySquare es = emptySquares.get(Greenfoot.getRandomNumber(emptySquares.size()));
@@ -96,54 +103,106 @@ public class Canvas extends World
         }
     }
 
-
     public void act(){
-        // Greenfoot is supposed to take no action unless one of the arrows is pressed:
-        if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("up") || Greenfoot.isKeyDown("down"))
-        {
-            stoneList = getObjects(Stone.class);
-            // The creation of the stoneList and returning "alreadyCombined" to "false" for all Stones is supposed to be done, regardless of which button was pressed
-            resetAlreadyCombined();
-
-                System.out.println("alreadyCombined");
-            // Before stones are attempted to move, there is a check whether or not the movement in those directions is even possible:
-            checkPossibilityOfMovement();
-
-                System.out.println("movement possible");
-            // If no movement is possible anymore, the game is supposed to end with a "Game over"
-            if (canMoveUp == false && canMoveRight == false && canMoveDown == false && canMoveLeft == false)
-            {
-                // file created with Audacity, 32 bit version didn't work, 16 boit version sounds like shit
-                Greenfoot.playSound("game over.wav");
-                Greenfoot.stop();
-            }
-
-            System.out.println(String.valueOf(canMoveUp));
-            System.out.println(String.valueOf(canMoveRight));
-            System.out.println(String.valueOf(canMoveDown));
-            System.out.println(String.valueOf(canMoveLeft));
-            // If a certain button has been pressed and movement into this direction is possible, the Stone(s) get moved.
-            // Since this will always end with at least one Stone being moved, another Stone will be randomly generated on an empty space.
-            if(Greenfoot.isKeyDown("right") && canMoveRight == true){
-                List<List<Stone>> sortedStones = sortToRight(stoneList);
-                moveStones(sortedStones,1,0);
-                createRandomNewStone();
-            }else if(Greenfoot.isKeyDown("left") && canMoveLeft == true){
-                List<List<Stone>> sortedStones = sortToLeft(stoneList);
-                moveStones(sortedStones,-1,0);
-                createRandomNewStone();
-            }else if(Greenfoot.isKeyDown("up") && canMoveUp == true){
-                List<List<Stone>> sortedStones = sortToUp(stoneList);
-                moveStones(sortedStones,0,-1);
-                createRandomNewStone();
-            }else if(Greenfoot.isKeyDown("down") && canMoveDown == true){
-                List<List<Stone>> sortedStones = sortToDown(stoneList);
-                moveStones(sortedStones,0,1);
-                createRandomNewStone();
-            }
-        }
+		// the creation of the stoneList and returning "alreadyCombined" to "false" for all Stones is supposed to be done, regardless of which button was pressed
+		resetAlreadyCombined();
+		// Keyboard input has first priority
+		// Mouse movement has second priority
+		pressedKey = Greenfoot.getKey();
+		if (pressedKey != null)
+		{
+			if (pressedKey.equals("right") || pressedKey.equals("left") || pressedKey.equals("up") || pressedKey.equals("down"))
+			{
+				// before stones are attempted to move, there is a check in which direction movement is possible
+				checkPossibilityOfMovement();
+				// if no movement is possible at all, the game is supposed to end with a "Game over"
+				if (canMoveUp == false && canMoveRight == false && canMoveDown == false && canMoveLeft == false)
+				{
+					// file created with Audacity, 32 bit version didn't work, 16 bit version sounds like shit
+					Greenfoot.playSound("game over.wav");
+					Greenfoot.stop();
+				}
+				// if movement is possible, the pressedKey is passed on
+				actBasedOnInput(pressedKey);
+			}
+		} else {                
+			// if no button has been pressed, the movement of the mouse is checked
+			// because the mouseDrag-event isn't tied to any actors, the mouseDrag-start is replaced with mousePressed
+			// because the mouseDrag-event isn't tied to any actors, it's parameter is (null)
+			// before stones are attempted to move, there is a check in which direction movement is possible
+			checkPossibilityOfMovement();
+			if (Greenfoot.mousePressed(null))
+			{
+				mouse = Greenfoot.getMouseInfo();
+				// If the mouse wasn't on the canvas, Greenfoot.getMouseInfo() will return null
+				if (mouse!=null)
+				{
+					dx1 = mouse.getX();
+					dy1 = mouse.getY();
+				}
+			}
+			if (Greenfoot.mouseDragEnded(null))
+			{
+				mouse = Greenfoot.getMouseInfo();
+				if (mouse!=null)
+				{
+					dx2 = mouse.getX();
+					dy2 = mouse.getY();
+					dx = dx2 - dx1;
+					dy = dy2 - dy1;
+					// movement based on mouse-input is complicated because the canvas is a 4x4 grid
+					// for instance, mouse-input such as "1 up, 1 left" can't be resolved to either "up" or "left"
+					// if dx and dy are the same, their sum will be 2*dx
+					// if dx = -dy, their sum will be 0
+					// both cases plus (dy==0 && dx==0) won't work
+					if (dx+dy!=0 && dx+dy!=2*dx && (dx!=0 || dy!=0))
+					{
+						if(dx>=0 && dy>=0 && dx>dy) {
+							actBasedOnInput("right"); // dx and dy positive, dx larger than dy = right
+						} else if (dx>=0 && dy>=0 && dx<dy) {
+							actBasedOnInput("down"); // dx and dy positive, dx smaller than dy = down
+						} else if (dx>=0 && dy<0 && dx>Math.abs(dy)) {
+							actBasedOnInput("right"); // dx pos and dy neg, dx larger than abs(dy) = right
+						} else if (dx>=0 && dy<0 && dx<Math.abs(dy)) {
+							actBasedOnInput("up"); // dx pos and dy neg, dx smaller than abs(dy) = up
+						} else if (dx<0 && dy>=0 && Math.abs(dx)>dy) {
+							actBasedOnInput("left"); // dx neg and dy pos, abs(dx) larger than dy = left
+						} else if (dx<0 && dy>=0 && Math.abs(dx)<dy) {
+							actBasedOnInput("down"); // dx neg and dy pos, abs(dx) smaller than dy = down
+						} else if (dx<0 && dy<0 && Math.abs(dx)>Math.abs(dy)) {
+							actBasedOnInput("left"); // dx and dy neg, abs(dx) larger than abs(dy) = left
+						} else if (dx<0 && dy<0 && Math.abs(dx)<Math.abs(dy)) {
+							actBasedOnInput("up"); // dx and dy neg, abs(dx) smaller than abs(dy) = up
+						}
+					}
+				}
+			}   
+		}
     }
 
+    public void actBasedOnInput(String input)
+    {
+        // if a certain button has been pressed and movement into this direction is possible, the Stone(s) get moved
+		// since this will always end with at least one Stone being moved, another Stone will be randomly generated on an empty space
+		if(input.equals("right") && canMoveRight == true){
+			List<List<Stone>> sortedStones = sortToRight(stoneList);
+			moveStones(sortedStones,1,0);
+			createRandomNewStone();
+		}else if(input.equals("left") && canMoveLeft == true){
+			List<List<Stone>> sortedStones = sortToLeft(stoneList);
+			moveStones(sortedStones,-1,0);
+			createRandomNewStone();
+		}else if(input.equals("up") && canMoveUp == true){
+			List<List<Stone>> sortedStones = sortToUp(stoneList);
+			moveStones(sortedStones,0,-1);
+			createRandomNewStone();
+		}else if(input.equals("down") && canMoveDown == true){
+			List<List<Stone>> sortedStones = sortToDown(stoneList);
+			moveStones(sortedStones,0,1);
+			createRandomNewStone();
+		}
+	}
+    
     List<List<Stone>> sortToRight(List<Stone> stones){
         List<List<Stone>> output = new ArrayList<List<Stone>>();
         //initialize two-dimensional list
@@ -262,9 +321,7 @@ public class Canvas extends World
 
     void moveStones(List<List<Stone>> stones, int directionX, int directionY){
         // stoneList-wise, every stone will perform "moveOrCombine" until it can no longer move / combine
-        // This fact is represented with the boolean returned from the method "canAct"
-
-            System.out.println("moveStones");
+        // this fact is represented by the boolean returned from the method "canAct"
         for (List<Stone> stoneList : stones) {
             for(int i = 0; i < stoneList.size();i++){
 
@@ -274,5 +331,5 @@ public class Canvas extends World
             }
         }
     }
-
+    
 }

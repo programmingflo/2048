@@ -6,18 +6,18 @@ import java.util.List;
  *
  * @author Florian Mansfeld & Georg Roemmling
  *
- * @version 0.250; 2018.11.21 - 00:30
+ * @version 0.400; 2018.11.26 - 13:30
  *
  */
 public class Stone extends Actor
 {
     /**
-     *  Mit "alreadyCombined" soll verhindert werden, dass sich ein Stein mit einem anderen Stein verbindet, obwohl sich einer der beiden schon verbunden hat.
-     *  Heisst,
+     *  "alreadyCombined" is supposed to limit a Stone's ability to combine with another Stone to once per turn
+     *  e.g. pressing "right" in this moment:
      *  2-2-4-8
-     *  soll beim Bewegen nach rechts hierzu werden:
+     *  is supposed to turn into:
      *  0-4-4-8
-     *  und nicht zu:
+     *  instead of:
      *  0-0-0-16
      */
 
@@ -34,11 +34,21 @@ public class Stone extends Actor
         return value;
     }
 
+    public void act() {
+        //
+    }
+    
     void doubleValue(){
-        // this method doesn't change "alreadyCombined" to true
+        // doubles the Stones' value, changes it's image and sets "alreadyCombined" to true
+        // if the Stone's value reaches 2048, the player has won
         this.value *= 2;
         changeImageBasedOnValue();
         this.alreadyCombined = true;
+        if (this.value == 2048)
+        {
+            System.out.println("Gewonnen!");
+            Greenfoot.stop();
+        }
     }
 
     public void setAlreadyCombined(boolean alreadyCombined)
@@ -59,52 +69,55 @@ public class Stone extends Actor
             this.setImage(valueStone + ".png");
         }catch (Exception e) {
             this.setImage("Fehler.png");
+            System.out.println("Es ist ein Fehler aufgetreten.");
+            Greenfoot.stop();
         }
     }
 
     public boolean canAct(int directionX, int directionY)
     {
-        // Die Tatsache, dass nur eine lineare Bewegung in eine der Richtungen durchgefuehrt wird, setz ich jetzt einfach mal voraus
-        // erste Pruefung darauf ob wir mit der gewuenschten Bewegung ueberhaupt auf dem Spielfeld landen wuerden:
+        // there is no check as to if the desired movement is NOT diagonal, since the directionX and directionY are passed on from "moveStones"
+        // first check is if the moevement is within the boundaries of the canvas
         if (!isAtBorder(directionX, directionY))
         {
-            // Falls in der gewuenschten Richtung kein Stein liegt, gehts:
+            // if there is no other stone in front, movement is possible
             Stone stoneOther = (Stone) getOneObjectAtOffset(directionX, directionY, Stone.class);
             if (stoneOther == null)
             {
-                return true;    // Kein anderer Stein in Bewegungsrichtung => Bewegung moeglich
+                return true;    // no other stone in front => movement possible
             } else {
-                // Andernfalls wird geprueft, ob die beiden den selben Wert haben:
+                // other stone in front, comparing values of both stones
                 if (this.getValue() == stoneOther.getValue())
                 {
-                    // Haben die beiden Steine denselben Wert, wird geprueft ob sie sich schon verbunden haben:
+                    // if both Stones have the same value, the next check is if any of them have already been combined this turn
                     if (this.getAlreadyCombined() != true && stoneOther.getAlreadyCombined() != true)
                     {
-                        return true;        // Anderer Stein hat denselben Wert, beide haben sich noch nicht verbunden == Verbindung moeglich
+                        return true;        // both have same value, not combined yet => combination possible
                     } else {
-                        return false;       // Anderer Stein hat denselben Wert, mind. einer der beidne hat sich schon verbunden == Verbindung nicht moeglich
+                        return false;       // both have same value, at least one has already been combined this turn => combination not possible
                     }
                 } else {
-                    return false;       // Anderer Stein hat anderen Wert === nichts moeglich
+                    return false;       // other Stone has different value => combination not possible
                 }
             }
         } else {
-            return false;       // Bewegung wuerde ausserhalb des Spielfelds landen == Geht nicht
+            return false;       // movement wouldn't end on Canvas => not possible
         }
     }
 
     public void moveOrCombine(int directionX, int directionY)
     {
-        // Falls kein Stein in Bewegungsrichtung liegt, wird sich einfach in die Richtung bewegt.
+        // if no other Stone is in front, movement is possible
         Stone stoneOther = (Stone) getOneObjectAtOffset(directionX, directionY, Stone.class);
         if (stoneOther == null)
         {
             setLocation(getX() + directionX, getY() + directionY);
         } else {
-            // andernfalls wird geprueft, ob der Stein vor uns denselben Wert hat:
+            // if other Stone is in front, comparison of values
             if (this.getValue() == stoneOther.getValue())
             {
-                // falls selber Wert, wird geprueft ob sich beide noch nicht verbunden haben --> falls dem so ist, wird sich verbunden
+                // if both Stones same value and none have been combined this turn, they will get combined
+				// "combine" = remove other Stone in front, double value of .this, move into desired direction
                 if (this.getAlreadyCombined() != true && stoneOther.getAlreadyCombined() != true)
                 {
                     // combination of two stones
