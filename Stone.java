@@ -37,11 +37,14 @@ public class Stone extends Actor
     public void act() {
         //
     }
-    
+
     void doubleValue(){
         // doubles the Stones' value, changes it's image and sets "alreadyCombined" to true
         // if the Stone's value reaches 2048, the player has won
         this.value *= 2;
+        Canvas canvas = (Canvas) getWorld();
+        canvas.score.addToScore(this.value);
+
         changeImageBasedOnValue();
         this.alreadyCombined = true;
         if (this.value == 2048)

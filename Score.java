@@ -20,4 +20,8 @@ class Score
     void addToScore(int summand){
         this.score += summand;
     }
+
+    void gameOver(){
+        System.out.println("Dein Score beträgt " + this.score);
+    }
 }

@@ -7,4 +7,6 @@ comment2.params=
 comment2.target=int\ getScore()
 comment3.params=summand
 comment3.target=void\ addToScore(int)
-numComments=4
+comment4.params=
+comment4.target=void\ gameOver()
+numComments=5

@@ -31,6 +31,7 @@ public class Canvas extends World
     private int dy2;
     String pressedKey;
     MouseInfo mouse;
+    Score score = new Score();
 
     public Canvas()
     {
@@ -119,13 +120,14 @@ public class Canvas extends World
 				if (canMoveUp == false && canMoveRight == false && canMoveDown == false && canMoveLeft == false)
 				{
 					// file created with Audacity, 32 bit version didn't work, 16 bit version sounds like shit
+          score.gameOver();
 					Greenfoot.playSound("game over.wav");
 					Greenfoot.stop();
 				}
 				// if movement is possible, the pressedKey is passed on
 				actBasedOnInput(pressedKey);
 			}
-		} else {                
+		} else {
 			// if no button has been pressed, the movement of the mouse is checked
 			// because the mouseDrag-event isn't tied to any actors, the mouseDrag-start is replaced with mousePressed
 			// because the mouseDrag-event isn't tied to any actors, it's parameter is (null)
@@ -176,7 +178,7 @@ public class Canvas extends World
 						}
 					}
 				}
-			}   
+			}
 		}
     }
 
@@ -202,7 +204,7 @@ public class Canvas extends World
 			createRandomNewStone();
 		}
 	}
-    
+
     List<List<Stone>> sortToRight(List<Stone> stones){
         List<List<Stone>> output = new ArrayList<List<Stone>>();
         //initialize two-dimensional list
@@ -331,5 +333,5 @@ public class Canvas extends World
             }
         }
     }
-    
+
 }
