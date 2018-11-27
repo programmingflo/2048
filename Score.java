@@ -22,5 +22,4 @@ class Score
     void addToScore(int summand){
         this.score += summand;
     }
-    
 }

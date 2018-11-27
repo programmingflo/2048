@@ -34,8 +34,8 @@ public class Canvas extends World
     String pressedKey;
     MouseInfo mouse;
     Score score = new Score();
-    
-    
+
+
     public Canvas()
     {
         super(4, 4, 100);
@@ -61,7 +61,7 @@ public class Canvas extends World
         displayScore();
         Greenfoot.stop();
     }
-    
+
     public void turnStonesTransparent()
     {
         for (Stone s: stoneList)
@@ -71,7 +71,7 @@ public class Canvas extends World
             s.setImage(imageStone);
         }
     }
-    
+
     public void displayScore()
     {
         gameEnded = new EndingMessage("Score:");
@@ -79,7 +79,7 @@ public class Canvas extends World
         gameEnded = new EndingMessage(""+this.score.getScore());    // "" + ... is needed in order to turn the int returned by .getScore() into a String
         this.addObject(gameEnded, 1, 2);
     }
-    
+
     public void resetAlreadyCombined()
     {
         stoneList = getObjects(Stone.class);
