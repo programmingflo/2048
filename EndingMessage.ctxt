@@ -1,0 +1,6 @@
+#BlueJ class context
+comment0.target=EndingMessage
+comment0.text=\r\n\ Messages\ such\ as\ "Gewonnen\!",\ which\ are\ supposed\ to\ be\ displayed\ at\ the\ end\ of\ the\ game\r\n\r\n\ @author\ Florian\ Mansfeld\ &\ Georg\ Roemmling\r\n\r\n\ @version\ 1.0\r\n\r\n
+comment1.params=message
+comment1.target=EndingMessage(java.lang.String)
+numComments=2

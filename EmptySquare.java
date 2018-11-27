@@ -3,18 +3,14 @@
  *
  * @author Florian Mansfeld & Georg Roemmling
  * 
- * @version 0.250; 2018.11.21 - 00:30
+ * @version 1.0
  *
  */
 public class EmptySquare  
 {
-    // instance variables - replace the example below with your own
     private int x;
     private int y;
 
-    /**
-     * Constructor for objects of class Coordinates
-     */
     public EmptySquare(int x, int y)
     {
         this.x = x;

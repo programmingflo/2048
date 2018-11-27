@@ -6,7 +6,7 @@ import java.util.List;
  *
  * @author Florian Mansfeld & Georg Roemmling
  *
- * @version 0.400; 2018.11.26 - 13:30
+ * @version 1.0
  *
  */
 public class Stone extends Actor
@@ -49,8 +49,7 @@ public class Stone extends Actor
         this.alreadyCombined = true;
         if (this.value == 2048)
         {
-            System.out.println("Gewonnen!");
-            Greenfoot.stop();
+            canvas.gameOver("Win");
         }
     }
 

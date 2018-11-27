@@ -1,12 +1,10 @@
 #BlueJ class context
 comment0.target=Score
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ Score\ here.\r\n\r\n\ @author\ Florian\ Mansfeld\ and\ Georg\ Roemmling\r\n\ @version\ 0.1\r\n
+comment0.text=\r\n\ Tracks\ the\ score\ the\ player\ has\ reached\ by\ combining\ Stones\r\n\r\n\ @author\ Florian\ Mansfeld\ &\ Georg\ Roemmling\r\n\r\n\ @version\ 1.0\r\n\r\n
 comment1.params=
 comment1.target=Score()
 comment2.params=
 comment2.target=int\ getScore()
 comment3.params=summand
 comment3.target=void\ addToScore(int)
-comment4.params=
-comment4.target=void\ gameOver()
-numComments=5
+numComments=4

@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Stone
-comment0.text=\r\n\ Stone\ on\ the\ canvas\r\n\r\n\ @author\ Florian\ Mansfeld\ &\ Georg\ Roemmling\r\n\r\n\ @version\ 0.400;\ 2018.11.26\ -\ 13\:30\r\n\r\n
+comment0.text=\r\n\ Stone\ on\ the\ canvas\r\n\r\n\ @author\ Florian\ Mansfeld\ &\ Georg\ Roemmling\r\n\r\n\ @version\ 1.0\r\n\r\n
 comment1.params=value
 comment1.target=Stone(int)
 comment10.params=stones\ directionX\ directionY
